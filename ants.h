@@ -6,7 +6,7 @@
 /*   By: cgleason <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/15 16:04:26 by cgleason          #+#    #+#             */
-/*   Updated: 2018/08/15 17:04:51 by cgleason         ###   ########.fr       */
+/*   Updated: 2018/09/06 14:27:40 by tdiaz            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,15 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
-# include "libft.h"
+# include "libft/libft.h"
 
-typdef struct	s_node
+typedef struct	s_node
 {
+	void			*data;
+	t_byte			antnum;
+	struct s_node	**nodes;
 }				t_node;
+
+
 
 #endif
