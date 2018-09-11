@@ -18,13 +18,37 @@
 # include <stdio.h>
 # include "libft/libft.h"
 
+typedef enum	e_nodetype
+{
+	start,
+	end,
+	mid,
+}				t_nodetype;	
+
+typedef t_vec	t_nodevec;
+typedef t_vec	t_linkvec;
+
 typedef struct	s_node
 {
-	void			*data;
-	t_byte			antnum;
-	struct s_node	**nodes;
+	t_nodetype		typ;
+	char			*name;
+	t_linkvec		*links;
 }				t_node;
 
+typedef struct	s_splay
+{
+	struct whaaaat	*pathparent;
+	struct s_splay	*parent;
+	struct s_splay	*left;
+	struct s_splay	*right;
+	t_node			*content;
+	int				key;
+}				t_splay;
 
+typedef struct	s_linkcut
+{
+}				t_linkcut;
+
+void			find_path(t_node **nodes, t_nodevec *graph);
 
 #endif

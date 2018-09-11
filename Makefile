@@ -16,7 +16,7 @@ CC = @gcc
 
 CFLAGS = -Wall -Wextra -Werror -o $(NAME)
 
-SRC = main.c
+SRC = main.c splay.c
 
 OBJS = $(SRC:.c=.o)
 
@@ -28,17 +28,17 @@ $(NAME): $(OBJS) $(LIB)
 	$(CC) $(CFLAGS) $(OBJS) $(LIB)
 
 $(LIB):
-	make -C $(LIBDIR)
+	@make -C $(LIBDIR)
 
 .PHONY: clean fclean all re
 
 clean:
 	@rm -f $(OBJS)
-	make -C $(LIBDIR) clean
+	@make -C $(LIBDIR) clean
 
 fclean: clean
 	@rm -f $(NAME)
-	make -C $(LIBDIR) fclean
+	@make -C $(LIBDIR) fclean
 
 all: $(NAME)
 

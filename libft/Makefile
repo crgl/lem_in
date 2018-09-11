@@ -21,7 +21,7 @@ SRC = mem1.c mem2.c ft_strlen.c copycat.c strfind.c strcomp.c \
 	  strlife.c striter_over.c strfresh.c ft_strsplit.c \
 	  put_stuff.c put_stuff_fd.c \
 	  lstlife.c lstiter_over.c \
-	  vecs.c \
+	  vecs.c vec_heap.c \
 	  get_next_line.c \
 	  wstrmod.c wchar_utf8.c
 
