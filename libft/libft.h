@@ -45,6 +45,8 @@ typedef int		(*t_cmp)(void *, void *);
 
 typedef unsigned char	t_byte;
 
+int				ft_len(void **arr);
+
 void			*ft_memset(void *ptr, int stpd, size_t n);
 void			ft_bzero(void *s, size_t n);
 void			*ft_memcpy(void *dst, const void *src, size_t n);
@@ -118,6 +120,7 @@ t_vec			*str2vec(char *str);
 char			*vec2str(t_vec *vec);
 void			vecdel(t_vec **avec);
 
+void			*get_element(t_vec *vec, size_t sz, size_t i);
 void			**vec_sort(t_vec *hvec, size_t sz, t_cmp cmp);
 
 int				get_next_line(const int fd, char **line);

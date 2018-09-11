@@ -12,6 +12,22 @@
 
 #include "libft.h"
 
+int		ft_len(void **arr)
+{
+	int	i;
+
+	i = 0;
+	while (*arr++ != NULL)
+		i++;
+	return (i);
+}
+
+void	*get_element(t_vec *vec, size_t sz, size_t i)
+{
+	if (i < vec->len / sz)
+		return ((void *)((char *)vec + sz * i));
+}
+
 void	heap_repair(void **array, int ind, int n, t_cmp cmp)
 {
 	int			lind;

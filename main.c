@@ -79,16 +79,6 @@ int		is_valid_node(char *line)
 	return (1);
 }
 
-int		ft_len(void **arr)
-{
-	int	i;
-
-	i = 0;
-	while (*arr++ != NULL)
-		i++;
-	return (i);
-}
-
 t_node	*find_node(t_node **nodes, char *key)
 {
 	int	len;
@@ -140,8 +130,8 @@ void	add_link(t_nodevec *graph, t_node **nodes, char *line)
 		free(nodes);
 		free_and_clear(graph);
 	}
-	veccat(n1->links, &n2, sizeof(n2));
-	veccat(n2->links, &n1, sizeof(n1));
+	veccat(n1->links, &((t_link){n2, 1}), sizeof(n2));
+	veccat(n2->links, &((t_link){n2, 1}), sizeof(n1));
 }
 
 void	add_node(t_nodevec *graph, char *line, t_nodetype typ)
@@ -152,10 +142,9 @@ void	add_node(t_nodevec *graph, char *line, t_nodetype typ)
 		free_and_clear(graph);
 }
 
-t_node	**parse(int fd, t_nodevec *graph)
+t_node	**parse(int fd, t_nodevec *graph, t_node **nodes)
 {
 	char	*line;
-	t_node	**nodes;
 	int		num_ants;
 
 	if (get_next_line(fd, &line) == 1)
@@ -198,7 +187,7 @@ t_node	**parse(int fd, t_nodevec *graph)
 	if ((nodes = clean_up(graph)) == NULL)
 	{
 		free(line);
-		return (NULL);
+		return (-1);
 	}
 	if (line[0] != '#')
 		add_link(graph, nodes, line);
@@ -209,23 +198,25 @@ t_node	**parse(int fd, t_nodevec *graph)
 			add_link(graph, nodes, line);
 		ft_strdel(&line);
 	}
-	return (nodes);
+	return (num_ants);
 }
 
 int		main(void)
 {
 	t_node		**nodes;
 	t_nodevec	*graph;
+	int			num_ants;
 
 	graph = vecnew(NULL, sizeof(t_node));
-	nodes = parse(0,  graph);
-	if (nodes == NULL)
+	nodes = NULL;
+	num_ants = parse(0, graph, nodes);
+	if (nodes == NULL || num_ants < 1)
 	{
 		ft_putendl_fd("Invalid input!", 2);
 		free_graph(graph);
 		return (-1);
 	}
-	find_path(nodes, graph);
+	find_path(nodes, graph, num_ants);
 	free_graph(graph);
 	return (0);
 }

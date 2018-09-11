@@ -45,10 +45,12 @@ typedef struct	s_splay
 	int				key;
 }				t_splay;
 
-typedef struct	s_linkcut
+typedef struct	s_link
 {
-}				t_linkcut;
+	t_node		*node;
+	int			cap;
+}				t_link;
 
-void			find_path(t_node **nodes, t_nodevec *graph);
+void			find_path(t_node **nodes, t_nodevec *graph, int num_ants);
 
 #endif
