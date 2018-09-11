@@ -19,7 +19,7 @@ void	free_graph(t_nodevec *graph)
 
 	loc = (t_node *)graph->e;
 	i = 0;
-	while (i < graph->cap / sizeof(t_node))
+	while (i < graph->len / sizeof(t_node))
 	{
 		free(loc[i].name);
 		vecdel(&(loc[i].links));
@@ -93,23 +93,32 @@ t_node	*find_node(t_node **nodes, char *key)
 {
 	int	len;
 	int	i;
-	int	diff;
+	int	upper;
+	int	lower;
 
 	len = ft_len((void **)nodes);
 	i = len / 2;
-	diff = len / 4;
+	upper = len - 1;
+	lower = 0;
 	if (ft_strequ(key, nodes[0]->name))
 		return (nodes[0]);
-	while (i != 0 && nodes[i])
+	while (upper != lower)
 	{
 		if (ft_strequ(key, nodes[i]->name))
 			return (nodes[i]);
 		if (ft_strcmp(key, nodes[i]->name) < 0)
-			i -= diff;
+		{
+			upper = i;
+			i = (i + lower - 1) / 2;
+		}
 		else
-			i += diff;
-		diff /= 2;
+		{
+			lower = i;
+			i = (i + upper + 1) / 2;
+		}
 	}
+	if (ft_strequ(key, nodes[i]->name))
+		return (nodes[i]);
 	return (NULL);
 }
 
@@ -137,8 +146,6 @@ void	add_link(t_nodevec *graph, t_node **nodes, char *line)
 
 void	add_node(t_nodevec *graph, char *line, t_nodetype typ)
 {
-	if (ft_strchr(line, ' ') || ft_strchr(ft_strchr(line, ' ') + 1, ' '))
-		*ft_strchr(line, ' ') = '\0';
 	if (is_valid_node(line))
 		veccat(graph, &((t_node){typ, ft_strdup(line), vecnew(NULL, sizeof(t_node *))}), sizeof(t_node));
 	else
@@ -155,7 +162,7 @@ t_node	**parse(int fd, t_nodevec *graph)
 		num_ants = ft_atoi(line);
 	else
 		return (NULL);
-	free(line);
+	ft_strdel(&line);
 	while (get_next_line(fd, &line) == 1)
 	{
 		ft_putendl(line);
@@ -171,16 +178,22 @@ t_node	**parse(int fd, t_nodevec *graph)
 			{
 				ft_strdel(&line);
 				get_next_line(fd, &line);
+				if (!line)
+					return (NULL);
+				ft_putendl(line);
 				add_node(graph, line, start);
 			}
 			else if (ft_strequ(line + 2, "end"))
 			{
 				ft_strdel(&line);
 				get_next_line(fd, &line);
+				if (!line)
+					return (NULL);
+				ft_putendl(line);
 				add_node(graph, line, end);
 			}
 		}
-		free(line);
+		ft_strdel(&line);
 	}
 	if ((nodes = clean_up(graph)) == NULL)
 	{
@@ -194,7 +207,7 @@ t_node	**parse(int fd, t_nodevec *graph)
 		ft_putendl(line);
 		if (line[0] != '#')
 			add_link(graph, nodes, line);
-		free(line);
+		ft_strdel(&line);
 	}
 	return (nodes);
 }
@@ -206,7 +219,7 @@ int		main(void)
 
 	graph = vecnew(NULL, sizeof(t_node));
 	nodes = parse(0,  graph);
-	if (graph == NULL)
+	if (nodes == NULL)
 	{
 		ft_putendl_fd("Invalid input!", 2);
 		free_graph(graph);

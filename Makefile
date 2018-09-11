@@ -30,7 +30,10 @@ $(NAME): $(OBJS) $(LIB)
 $(LIB):
 	@make -C $(LIBDIR)
 
-.PHONY: clean fclean all re
+.PHONY: clean fclean all re debug
+
+debug: $(SRC) $(LIB)
+	$(CC) -o debug -g $(SRC) $(LIB)
 
 clean:
 	@rm -f $(OBJS)
