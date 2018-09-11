@@ -37,7 +37,7 @@ typedef struct	s_node
 
 typedef struct	s_splay
 {
-	struct whaaaat	*pathparent;
+	struct s_splay	*pathparent;
 	struct s_splay	*parent;
 	struct s_splay	*left;
 	struct s_splay	*right;
