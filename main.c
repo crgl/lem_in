@@ -140,7 +140,6 @@ void	add_link(t_nodevec *graph, t_node **nodes, char *line)
 	node2 = ft_strchr(line, '-') + 1;
 	*ft_strchr(line, '-') = '\0';
 	n2 = find_node(nodes, node2);
-	*ft_strchr(line, '-') = '\0';
 	n1 = find_node(nodes, line);
 	dict_mod("set", ft_sthreejoin(node2, "-", line), 1);
 	if (!n1 || !n2)
@@ -149,7 +148,7 @@ void	add_link(t_nodevec *graph, t_node **nodes, char *line)
 		free_and_clear(graph);
 	}
 	veccat(n1->links, &n2, sizeof(n2));
-	veccat(n2->links, &n2, sizeof(n1));
+	veccat(n2->links, &n1, sizeof(n1));
 }
 
 void	add_node(t_nodevec *graph, char *line, t_nodetype typ)
