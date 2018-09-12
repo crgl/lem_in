@@ -156,7 +156,8 @@ void	add_node(t_nodevec *graph, char *line, t_nodetype typ)
 {
 	if (is_valid_node(line))
 		veccat(graph, &((t_node){typ, 0, ft_strdup(line),
-			vecnew(NULL, sizeof(t_node *))}), sizeof(t_node));
+			vecnew(NULL, sizeof(t_node *))}),
+			sizeof(t_node));
 	else
 		free_and_clear(graph);
 }
