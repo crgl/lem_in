@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../ftssl.h"
+#include "ftssl.h"
 
-int		ind(char *s, int x)
+int		index(char *s, int x)
 {
 	t_md5set		set;
 	unsigned char	digest[16];
@@ -22,5 +22,5 @@ int		ind(char *s, int x)
 	init_md5(&set);
 	update_md5(&set, (t_ptr)s, len);
 	end_md5(digest, &set);
-	return((digest[0] * 256 + digest[15]) % x);
+	return(((digest[0] * digest[15]) ^ (digest[0] + digest[15])) % x);
 }

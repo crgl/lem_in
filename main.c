@@ -12,6 +12,18 @@
 
 #include "ants.h"
 
+char	*ft_sthreejoin(char *s1, char *s2, char *s3)
+{
+	char	*tmp;
+	char	*out;
+
+	tmp = ft_strjoin(s1, s2);
+	out = ft_strjoin(tmp, s3);
+	if (tmp)
+		free(tmp);
+	return (out);
+}
+
 void	free_graph(t_nodevec *graph)
 {
 	t_node			*loc;
@@ -31,6 +43,7 @@ void	free_graph(t_nodevec *graph)
 void	free_and_clear(t_nodevec *graph)
 {
 	free_graph(graph);
+	dict_mod("clear", NULL, 0);
 	ft_putendl_fd("Invalid input!", 2);
 	exit(-1);
 }
@@ -116,28 +129,34 @@ void	add_link(t_nodevec *graph, t_node **nodes, char *line)
 {
 	t_node	*n1;
 	t_node	*n2;
+	char	*node2;
 
 	if (!ft_strchr(line, '-'))
 	{
 		free(nodes);
 		free_and_clear(graph);
 	}
-	n2 = find_node(nodes, ft_strchr(line, '-') + 1);
+	dict_mod("set", ft_strdup(line), 1);
+	node2 = ft_strchr(line, '-') + 1;
+	*ft_strchr(line, '-') = '\0';
+	n2 = find_node(nodes, node2);
 	*ft_strchr(line, '-') = '\0';
 	n1 = find_node(nodes, line);
+	dict_mod("set", ft_sthreejoin(node2, "-", line), 1);
 	if (!n1 || !n2)
 	{
 		free(nodes);
 		free_and_clear(graph);
 	}
-	veccat(n1->links, &((t_link){n2, 1}), sizeof(n2));
-	veccat(n2->links, &((t_link){n2, 1}), sizeof(n1));
+	veccat(n1->links, &n2, sizeof(n2));
+	veccat(n2->links, &n2, sizeof(n1));
 }
 
 void	add_node(t_nodevec *graph, char *line, t_nodetype typ)
 {
 	if (is_valid_node(line))
-		veccat(graph, &((t_node){typ, ft_strdup(line), vecnew(NULL, sizeof(t_node *))}), sizeof(t_node));
+		veccat(graph, &((t_node){typ, 0, ft_strdup(line),
+			vecnew(NULL, sizeof(t_node *))}), sizeof(t_node));
 	else
 		free_and_clear(graph);
 }

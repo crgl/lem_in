@@ -16,7 +16,7 @@ CC = @gcc
 
 CFLAGS = -Wall -Wextra -Werror -o $(NAME)
 
-SRC = main.c splay.c
+SRC = main.c splay.c qops.c dict.c algo.c
 
 OBJS = $(SRC:.c=.o)
 
