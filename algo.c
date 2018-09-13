@@ -137,9 +137,83 @@ void	adjust_capacities(t_node **nodes, int start_ind)
 		;
 }
 
-void	send_out(t_node **nodes, t_npvec *sequence, int maximum)
+t_list	*make_list_of(t_npair just_traveled)
 {
-	return ;
+	t_node	*current;
+	t_node	*ln;
+	int		i;
+	char	*link;
+	t_list	*out;
+
+	current = just_traveled[1];
+	out = NULL;
+	while ((ln = (t_node *)get_element(current->links,
+			sizeof(t_node *), i++)))
+	{
+		link = ft_sthreejoin(current->name, "-", ln->name);
+		if (dict_mod("get", link, 0) == 0)
+			out = ft_lstnew(&((t_npair){current, ln}), sizeof(t_npair));
+		free(link);
+		if (out)
+			return (out);
+	}
+}
+void	print_and_free(t_queue *rows)
+{
+	t_list	*ln;
+	t_npair	*nodes;
+	int		i;
+
+	i = 0;
+	while ((ln = q_pop(rows)) != NULL)
+	{
+		if (ln->content != NULL)
+		{
+			nodes = (t_npair *)(ln->content);
+			ft_printf("%.*sL%s-%s", i, " ", (*nodes)[0]->name, (*nodes)[1]->name);
+			free(nodes);
+			i = 1;
+		}
+		else
+		{
+			ft_printf("\n");
+			i = 0;
+		}
+		free(ln);
+	}
+	free(rows);
+}
+
+void	send_out(t_node **nodes, t_npvec *sequence, int num_ants)
+{
+	t_list	*row;
+	int		i;
+	t_npair	*whaaat;
+	t_list	*oldrow;
+	t_queue	*whatever;
+
+	oldrow = NULL;
+	whatever = q_new(NULL);
+	while (num_ants > 0)
+	{
+		row = NULL;
+		while ((whaaat = (t_npair *)get_element(sequence, sizeof(t_npair), i)) &&
+				i < num_ants)
+		{
+			ft_lstadd(&row, ft_lstnew(whaaat, sizeof(*whaaat));
+			i++;
+		}
+		while (oldrow)
+		{
+			ft_lstadd(&row, make_list_of(*(t_npair *)oldrow->content));
+			oldrow = oldrow->next;
+		}
+		q_add(whatever, ft_lstnew(NULL, 0));
+		q_add(whatever, row);
+		oldrow = row;
+		num_ants -= sequence->len / sizeof(t_npair);
+	}
+	print_and_free(whatever);
 }
 
 void	find_path(t_node **nodes, t_nodevec *graph, int num_ants)
@@ -173,7 +247,6 @@ void	find_path(t_node **nodes, t_nodevec *graph, int num_ants)
 	while (num_ants > 0)
 	{
 		send_out(nodes, sequence, num_ants);
-		num_ants -= ft_len((void **)sequence);
 	}
 	free(sequence);
 }
