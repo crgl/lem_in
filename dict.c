@@ -43,7 +43,7 @@ int		dict_mod(char *op, char *key, int value)
 		while (keys[ind] && ft_strcmp(keys[ind], key))
 			ind = (ind + 1) % DICT_SIZE;
 		if (keys[ind])
-			caps[ind] = value;
+			caps[ind] += value;
 		else
 			freak_out(key);
 	}

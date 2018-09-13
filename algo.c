@@ -43,10 +43,10 @@ void	traverse(char *link, t_node **nodes)
 	char	**ends;
 	char	*rev;
 
-	dict_mod("mod", link, 0);
+	dict_mod("mod", link, -1);
 	ends = ft_strsplit(link, '-');
 	rev = ft_sthreejoin(ends[1], "-", ends[0]);
-	dict_mod("mod", rev, 2);
+	dict_mod("mod", rev, 1);
 	find_node(nodes, ends[0])->visited |= EVER;
 	find_node(nodes, ends[1])->visited |= EVER;
 	free(ends[0]);
@@ -95,7 +95,7 @@ int	find_flow(t_queue *to_search, t_node **nodes)
 			return (1);
 		}
 		else if ((*to_inspect)->typ == mid && ((*to_inspect)->visited & NOW) == 0 &&
-					(((*to_inspect)->visited & EVER) == 0 || found->entered_on_2))
+					((found->current->visited & EVER) == 0 || found->entered_on_2))
 		{
 			new_path = vecnew(found->path->e, found->path->len);
 			veccat(new_path, &new_link, sizeof(new_link));
@@ -105,7 +105,8 @@ int	find_flow(t_queue *to_search, t_node **nodes)
 			new_nameless_var->path = new_path;
 			q_add(to_search, ft_lstnew(&new_nameless_var, sizeof(new_nameless_var)));
 			veccat(to_free, &new_link, sizeof(char *));
-			(*to_inspect)->visited |= NOW;
+			if (dict_mod("get", new_link, 0) == 2 || ((*to_inspect)->visited & EVER) == 0)
+				(*to_inspect)->visited |= NOW;
 		}
 		else if ((*to_inspect)->typ == mid && ((*to_inspect)->visited & NOW) == 0)
 		{
@@ -119,6 +120,7 @@ int	find_flow(t_queue *to_search, t_node **nodes)
 				new_nameless_var->path = new_path;
 				q_add(to_search, ft_lstnew(&new_nameless_var, sizeof(new_nameless_var)));
 				veccat(to_free, &new_link, sizeof(char *));
+				(*to_inspect)->visited |= NOW;
 			}
 		}
 	}
