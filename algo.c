@@ -15,18 +15,22 @@
 void	search_and_destroy(t_queue *to_search, t_path *found, t_svec *to_free)
 {
 	int		i;
-	char	*freeable;
+	char	**freeable;
 	t_list	*this_too;
 	t_path	*also_this;
 
 	i = 0;
-	while ((freeable = (char *)get_element(to_free, sizeof(char *), i++)))
-		free(freeable);
-	vecdel(&(found->path));
-	free(found);
+	while ((freeable = (char **)get_element(to_free, sizeof(char *), i++)))
+		free(*freeable);
+	if (found->current->typ != start)
+	{
+		vecdel(&(found->path));
+		free(found);
+	}
 	while ((this_too = q_pop(to_search)))
 	{
 		also_this = *((t_path **)(this_too->content));
+		also_this->current->visited &= ~NOW;
 		vecdel(&(also_this->path));
 		free(also_this);
 		free(this_too);
@@ -86,6 +90,7 @@ int	find_flow(t_queue *to_search, t_node **nodes)
 				traverse(*link, nodes);
 			traverse(new_link, nodes);
 			search_and_destroy(to_search, found, to_free);
+			vecdel(&to_free);
 			free(new_link);
 			return (1);
 		}
@@ -145,17 +150,12 @@ t_list	*make_list_of(t_npair just_traveled)
 	char	*link;
 	t_list	*out;
 
-ft_printf("At least we made it in with %p\n", just_traveled);
 	current = just_traveled[1];
-ft_printf("the node should be at %p\n", current);
-ft_printf("The name should be at %p and the links at %p\n", current->name, current->links);
 	out = NULL;
 	i = 0;
 	while ((ln = (t_node **)get_element(current->links,
 			sizeof(t_node *), i++)))
 	{
-ft_printf("We're in the loop!\n");
-ft_printf("We're in the loop with %s!\n", (*ln)->name);
 		link = ft_sthreejoin(current->name, "-", (*ln)->name);
 		if (dict_mod("get", link, 0) == 0)
 			out = ft_lstnew(&((t_npair){current, *ln}), sizeof(t_npair));
@@ -195,20 +195,20 @@ void	send_out(t_npvec *sequence, int num_ants)
 {
 	t_list	*row;
 	int		i;
-	t_npair	**whaaat;
+	t_npair	*whaaat;
 	t_list	*oldrow;
 	t_queue	*whatever;
 
 	oldrow = NULL;
 	whatever = q_new(NULL);
-	while (num_ants > 0)
+	while (num_ants > 0 || oldrow)
 	{
 		row = NULL;
 		i = 0;
-		while ((whaaat = (t_npair **)get_element(sequence, sizeof(t_npair), i)) &&
+		while ((whaaat = (t_npair *)get_element(sequence, sizeof(t_npair), i)) &&
 				i < num_ants)
 		{
-			ft_lstadd(&row, ft_lstnew(*whaaat, sizeof(t_npair)));
+			ft_lstadd(&row, ft_lstnew(whaaat, sizeof(t_npair)));
 			i++;
 		}
 		while (oldrow)
@@ -252,9 +252,12 @@ void	find_path(t_node **nodes, int num_ants)
 			veccat(sequence, &((t_npair){nodes[start_ind], *ln}), sizeof(t_npair));
 		free(link);
 	}
-	while (num_ants > 0)
+	if (sequence->len == 0)
 	{
-		send_out(sequence, num_ants);
+		free(sequence);
+		ft_putendl_fd("ERROR: No path to sink", 2);
+		return ;
 	}
+	send_out(sequence, num_ants);
 	free(sequence);
 }
