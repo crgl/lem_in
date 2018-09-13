@@ -94,17 +94,13 @@ int		is_valid_node(char *line)
 
 t_node	*find_node(t_node **nodes, char *key)
 {
-	int	len;
 	int	i;
 	int	upper;
 	int	lower;
 
-	len = ft_len((void **)nodes);
-	i = len / 2;
-	upper = len - 1;
+	i = ft_len((void **)nodes) / 2;
+	upper = ft_len((void **)nodes) - 1;
 	lower = 0;
-	if (ft_strequ(key, nodes[0]->name))
-		return (nodes[0]);
 	while (upper != lower)
 	{
 		if (ft_strequ(key, nodes[i]->name))
@@ -169,7 +165,10 @@ int		parse(int fd, t_nodevec *graph, t_node ***nodes)
 	int		num_ants;
 
 	if (get_next_line(fd, &line) == 1)
+	{
 		num_ants = ft_atoi(line);
+		ft_putendl(line);
+	}
 	else
 		return (-1);
 	ft_strdel(&line);
