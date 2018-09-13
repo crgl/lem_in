@@ -200,7 +200,7 @@ void	send_out(t_node **nodes, t_npvec *sequence, int num_ants)
 		while ((whaaat = (t_npair *)get_element(sequence, sizeof(t_npair), i)) &&
 				i < num_ants)
 		{
-			ft_lstadd(&row, ft_lstnew(whaaat, sizeof(*whaaat));
+			ft_lstadd(&row, ft_lstnew(whaaat, sizeof(*whaaat)));
 			i++;
 		}
 		while (oldrow)
