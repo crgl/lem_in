@@ -23,6 +23,7 @@ t_queue	*q_new(t_list *list)
 	while (list && list->next)
 		list = list->next;
 	queue->end = list;
+	return (queue);
 }
 
 void	q_add(t_queue *queue, t_list *list)

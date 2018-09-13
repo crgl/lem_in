@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../ftssl.h"
+#include "ftssl.h"
 
 void	c_bits(unsigned char *output, uint32_t *input, unsigned int len)
 {

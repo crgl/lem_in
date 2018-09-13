@@ -35,8 +35,6 @@ typedef t_vec	t_linkvec;
 typedef t_vec	t_npvec;
 typedef t_vec	t_svec;
 
-typedef t_node	t_npair[2];
-
 typedef struct	s_node
 {
 	t_nodetype		typ;
@@ -44,6 +42,8 @@ typedef struct	s_node
 	char			*name;
 	t_linkvec		*links;
 }				t_node;
+
+typedef t_node	*t_npair[2];
 
 typedef struct	s_splay
 {
@@ -76,10 +76,10 @@ typedef struct	s_path
 
 char			*ft_sthreejoin(char *s1, char *s2, char *s3);
 
-void			find_path(t_node **nodes, t_nodevec *graph, int num_ants);
+void			find_path(t_node **nodes, int num_ants);
 t_node			*find_node(t_node **nodes, char *key);
 
-int				index(char *s, int x);
+int				index_of(char *s, int x);
 int				dict_mod(char *op, char *key, int value);
 
 t_queue			*q_new(t_list *list);

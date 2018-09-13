@@ -34,6 +34,8 @@ t_list	*ft_lstnew(void const *content, size_t content_size)
 
 void	ft_lstadd(t_list **alst, t_list *new)
 {
+	if (!new)
+		return ;
 	new->next = *alst;
 	*alst = new;
 }

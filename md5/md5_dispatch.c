@@ -12,7 +12,7 @@
 
 #include "ftssl.h"
 
-int		index(char *s, int x)
+int		index_of(char *s, int x)
 {
 	t_md5set		set;
 	unsigned char	digest[16];

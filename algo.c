@@ -64,7 +64,7 @@ int	find_flow(t_queue *to_search, t_node **nodes)
 	t_svec			*new_path;
 	t_path			*new_nameless_var;
 
-	if (!to_search)
+	if (to_search->start == NULL)
 		return (0);
 	if (!to_free)
 		to_free = vecnew(NULL, sizeof(char *));
@@ -89,8 +89,8 @@ int	find_flow(t_queue *to_search, t_node **nodes)
 			free(new_link);
 			return (1);
 		}
-		else if ((*to_inspect)->typ == mid && (*to_inspect)->visited & NOW == 0 &&
-					((*to_inspect)->visited & EVER == 0 || found->entered_on_2))
+		else if ((*to_inspect)->typ == mid && ((*to_inspect)->visited & NOW) == 0 &&
+					(((*to_inspect)->visited & EVER) == 0 || found->entered_on_2))
 		{
 			new_path = vecnew(found->path->e, found->path->len);
 			veccat(new_path, &new_link, sizeof(new_link));
@@ -102,7 +102,7 @@ int	find_flow(t_queue *to_search, t_node **nodes)
 			veccat(to_free, &new_link, sizeof(char *));
 			(*to_inspect)->visited |= NOW;
 		}
-		else if ((*to_inspect)->typ == mid && (*to_inspect)->visited & NOW == 0)
+		else if ((*to_inspect)->typ == mid && ((*to_inspect)->visited & NOW) == 0)
 		{
 			if (dict_mod("get", new_link, 0) == 2)
 			{
@@ -140,23 +140,30 @@ void	adjust_capacities(t_node **nodes, int start_ind)
 t_list	*make_list_of(t_npair just_traveled)
 {
 	t_node	*current;
-	t_node	*ln;
+	t_node	**ln;
 	int		i;
 	char	*link;
 	t_list	*out;
 
+ft_printf("At least we made it in with %p\n", just_traveled);
 	current = just_traveled[1];
+ft_printf("the node should be at %p\n", current);
+ft_printf("The name should be at %p and the links at %p\n", current->name, current->links);
 	out = NULL;
-	while ((ln = (t_node *)get_element(current->links,
+	i = 0;
+	while ((ln = (t_node **)get_element(current->links,
 			sizeof(t_node *), i++)))
 	{
-		link = ft_sthreejoin(current->name, "-", ln->name);
+ft_printf("We're in the loop!\n");
+ft_printf("We're in the loop with %s!\n", (*ln)->name);
+		link = ft_sthreejoin(current->name, "-", (*ln)->name);
 		if (dict_mod("get", link, 0) == 0)
-			out = ft_lstnew(&((t_npair){current, ln}), sizeof(t_npair));
+			out = ft_lstnew(&((t_npair){current, *ln}), sizeof(t_npair));
 		free(link);
 		if (out)
 			return (out);
 	}
+	return (NULL);
 }
 void	print_and_free(t_queue *rows)
 {
@@ -184,11 +191,11 @@ void	print_and_free(t_queue *rows)
 	free(rows);
 }
 
-void	send_out(t_node **nodes, t_npvec *sequence, int num_ants)
+void	send_out(t_npvec *sequence, int num_ants)
 {
 	t_list	*row;
 	int		i;
-	t_npair	*whaaat;
+	t_npair	**whaaat;
 	t_list	*oldrow;
 	t_queue	*whatever;
 
@@ -197,15 +204,16 @@ void	send_out(t_node **nodes, t_npvec *sequence, int num_ants)
 	while (num_ants > 0)
 	{
 		row = NULL;
-		while ((whaaat = (t_npair *)get_element(sequence, sizeof(t_npair), i)) &&
+		i = 0;
+		while ((whaaat = (t_npair **)get_element(sequence, sizeof(t_npair), i)) &&
 				i < num_ants)
 		{
-			ft_lstadd(&row, ft_lstnew(whaaat, sizeof(*whaaat)));
+			ft_lstadd(&row, ft_lstnew(*whaaat, sizeof(t_npair)));
 			i++;
 		}
 		while (oldrow)
 		{
-			ft_lstadd(&row, make_list_of(*(t_npair *)oldrow->content));
+			ft_lstadd(&row, make_list_of(*(t_npair *)(oldrow->content)));
 			oldrow = oldrow->next;
 		}
 		q_add(whatever, ft_lstnew(NULL, 0));
@@ -216,11 +224,11 @@ void	send_out(t_node **nodes, t_npvec *sequence, int num_ants)
 	print_and_free(whatever);
 }
 
-void	find_path(t_node **nodes, t_nodevec *graph, int num_ants)
+void	find_path(t_node **nodes, int num_ants)
 {
 	int		start_ind;
 	int		i;
-	t_node	*ln;
+	t_node	**ln;
 	t_npvec	*sequence;
 	char	*link;
 
@@ -236,17 +244,17 @@ void	find_path(t_node **nodes, t_nodevec *graph, int num_ants)
 	adjust_capacities(nodes, start_ind);
 	sequence = vecnew(NULL, sizeof(t_npair));
 	i = 0;
-	while ((ln = (t_node *)get_element(nodes[start_ind]->links,
+	while ((ln = (t_node **)get_element(nodes[start_ind]->links,
 			sizeof(t_node *), i++)))
 	{
-		link = ft_sthreejoin(nodes[start_ind]->name, "-", ln->name);
+		link = ft_sthreejoin(nodes[start_ind]->name, "-", (*ln)->name);
 		if (dict_mod("get", link, 0) == 0)
-			veccat(sequence, &((t_npair){nodes[start_ind], ln}), sizeof(t_npair));
+			veccat(sequence, &((t_npair){nodes[start_ind], *ln}), sizeof(t_npair));
 		free(link);
 	}
 	while (num_ants > 0)
 	{
-		send_out(nodes, sequence, num_ants);
+		send_out(sequence, num_ants);
 	}
 	free(sequence);
 }

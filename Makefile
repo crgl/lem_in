@@ -16,7 +16,8 @@ CC = @gcc
 
 CFLAGS = -Wall -Wextra -Werror -o $(NAME)
 
-SRC = main.c splay.c qops.c dict.c algo.c
+SRC = main.c qops.c dict.c algo.c md5/md5_bitset.c md5/md5_dispatch.c \
+		md5/md5_phase.c md5/md5_prmtvs.c md5/md5_rounds.c
 
 OBJS = $(SRC:.c=.o)
 

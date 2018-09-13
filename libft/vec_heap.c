@@ -25,7 +25,8 @@ int		ft_len(void **arr)
 void	*get_element(t_vec *vec, size_t sz, size_t i)
 {
 	if (i < vec->len / sz)
-		return ((void *)((char *)vec + sz * i));
+		return ((void *)((char *)(vec->e) + sz * i));
+	return (NULL);
 }
 
 void	heap_repair(void **array, int ind, int n, t_cmp cmp)

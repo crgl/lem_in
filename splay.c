@@ -12,12 +12,6 @@
 
 #include "ants.h"
 
-void	find_path(t_node **nodes, t_nodevec *graph)
-{
-	(void)nodes;
-	(void)graph;
-}
-
 void	rot_right(t_splay **root)
 {
 	t_splay *pivot;

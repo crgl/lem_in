@@ -130,6 +130,7 @@ void	add_link(t_nodevec *graph, t_node **nodes, char *line)
 	t_node	*n1;
 	t_node	*n2;
 	char	*node2;
+	char	*rev;
 
 	if (!ft_strchr(line, '-'))
 	{
@@ -141,7 +142,8 @@ void	add_link(t_nodevec *graph, t_node **nodes, char *line)
 	*ft_strchr(line, '-') = '\0';
 	n2 = find_node(nodes, node2);
 	n1 = find_node(nodes, line);
-	dict_mod("set", ft_sthreejoin(node2, "-", line), 1);
+	rev = ft_sthreejoin(node2, "-", line);
+	dict_mod("set", rev, 1);
 	if (!n1 || !n2)
 	{
 		free(nodes);
@@ -161,7 +163,7 @@ void	add_node(t_nodevec *graph, char *line, t_nodetype typ)
 		free_and_clear(graph);
 }
 
-t_node	**parse(int fd, t_nodevec *graph, t_node **nodes)
+int		parse(int fd, t_nodevec *graph, t_node ***nodes)
 {
 	char	*line;
 	int		num_ants;
@@ -169,13 +171,13 @@ t_node	**parse(int fd, t_nodevec *graph, t_node **nodes)
 	if (get_next_line(fd, &line) == 1)
 		num_ants = ft_atoi(line);
 	else
-		return (NULL);
+		return (-1);
 	ft_strdel(&line);
 	while (get_next_line(fd, &line) == 1)
 	{
 		ft_putendl(line);
 		if (ft_strlen(line) < 2)
-			return (NULL);
+			return (-1);
 		if (ft_strchr(line, '-'))
 			break ;
 		if (line[0] != '#')
@@ -187,7 +189,7 @@ t_node	**parse(int fd, t_nodevec *graph, t_node **nodes)
 				ft_strdel(&line);
 				get_next_line(fd, &line);
 				if (!line)
-					return (NULL);
+					return (-1);
 				ft_putendl(line);
 				add_node(graph, line, start);
 			}
@@ -196,25 +198,25 @@ t_node	**parse(int fd, t_nodevec *graph, t_node **nodes)
 				ft_strdel(&line);
 				get_next_line(fd, &line);
 				if (!line)
-					return (NULL);
+					return (-1);
 				ft_putendl(line);
 				add_node(graph, line, end);
 			}
 		}
 		ft_strdel(&line);
 	}
-	if ((nodes = clean_up(graph)) == NULL)
+	if (((*nodes) = clean_up(graph)) == NULL)
 	{
 		free(line);
 		return (-1);
 	}
 	if (line[0] != '#')
-		add_link(graph, nodes, line);
+		add_link(graph, (*nodes), line);
 	while (get_next_line(fd, &line) == 1)
 	{
 		ft_putendl(line);
 		if (line[0] != '#')
-			add_link(graph, nodes, line);
+			add_link(graph, (*nodes), line);
 		ft_strdel(&line);
 	}
 	return (num_ants);
@@ -228,14 +230,14 @@ int		main(void)
 
 	graph = vecnew(NULL, sizeof(t_node));
 	nodes = NULL;
-	num_ants = parse(0, graph, nodes);
+	num_ants = parse(0, graph, &nodes);
 	if (nodes == NULL || num_ants < 1)
 	{
 		ft_putendl_fd("Invalid input!", 2);
 		free_graph(graph);
 		return (-1);
 	}
-	find_path(nodes, graph, num_ants);
+	find_path(nodes, num_ants);
 	free_graph(graph);
 	return (0);
 }
