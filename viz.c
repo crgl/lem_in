@@ -12,6 +12,19 @@
 
 #include "image.h"
 
+void	free_matrix(void ***twod)
+{
+	int	i;
+
+	i = 0;
+	if (*twod == NULL)
+		return ;
+	while ((*twod)[i] != NULL)
+		free((*twod)[i++]);
+	free(*twod);
+	*twod = NULL;
+}
+
 char	*ft_sthreejoin(char *s1, char *s2, char *s3)
 {
 	char	*tmp;
@@ -148,7 +161,7 @@ t_ptrmap	**clean_up(t_pmvec *doublenodes)
 	return (nodes);
 }
 
-void	add_node(t_pmvec *doublenodes, char *line, int inactive, int active)
+void	add_node(t_pmvec *doublenodes, char *line, unsigned int inactive, unsigned int active)
 {
 	t_ptrmap	*the_stuff;
 	
@@ -320,41 +333,101 @@ void	fill_between(char *map, t_ptrmap ***annotate, t_ptrmap *edge)
 	{
 		if (map[x_start + edge->coords[0][1] * 201] == ' ')
 			map[x_start + edge->coords[0][1] * 201] = '=';
-		add_to_annotation(annotate, edge, x_start + edge->coords[0][1] * 201);
+		if (map[x_start + edge->coords[0][1] * 201] != '@')
+			add_to_annotation(annotate, edge, x_start + edge->coords[0][1] * 201);
 		x_start++;
 	}
 	while (y_start < edge->coords[1][1])
 	{
 		if (map[edge->coords[1][0] + y_start * 201] == ' ')
 			map[edge->coords[1][0] + y_start * 201] = '|';
-		add_to_annotation(annotate, edge, edge->coords[1][0] + y_start * 201);
+		if (map[edge->coords[1][0] + y_start * 201] != '@')
+			add_to_annotation(annotate, edge, edge->coords[1][0] + y_start * 201);
 		y_start++;
 	}
 	while (x_start > edge->coords[1][0])
 	{
 		if (map[x_start + edge->coords[0][1] * 201] == ' ')
 			map[x_start + edge->coords[0][1] * 201] = '=';
-		add_to_annotation(annotate, edge, x_start + edge->coords[0][1] * 201);
+		if (map[x_start + edge->coords[0][1] * 201] != '@')
+			add_to_annotation(annotate, edge, x_start + edge->coords[0][1] * 201);
 		x_start--;
 	}
 	while (y_start > edge->coords[1][1])
 	{
 		if (map[edge->coords[1][0] + y_start * 201] == ' ')
 			map[edge->coords[1][0] + y_start * 201] = '|';
-		add_to_annotation(annotate, edge, edge->coords[1][0] + y_start * 201);
+		if (map[edge->coords[1][0] + y_start * 201] != '@')
+			add_to_annotation(annotate, edge, edge->coords[1][0] + y_start * 201);
 		y_start--;
 	}
 }
 
+t_ptrmap	*find_edge(t_ptrmap **edges, char *key1, char *key2)
+{
+	int		i;
+	int		upper;
+	int		lower;
+	char	*tmp;
+
+	i = ft_len((void **)edges) / 2;
+	upper = ft_len((void **)edges) - 1;
+	lower = 0;
+	if (ft_strcmp(key1, key2) > 0)
+	{
+		tmp = key1;
+		key1 = key2;
+		key2 = tmp;
+	}
+	while (upper != lower)
+	{
+		if (ft_strequ(key1, edges[i]->names[0]) && ft_strequ(key2, edges[i]->names[1]))
+			return (edges[i]);
+		if (ft_strcmp(key1, edges[i]->names[0]) < 0 || (ft_strcmp(key1, edges[i]->names[0]) == 0 && ft_strcmp(key2, edges[i]->names[1]) < 0))
+		{
+			upper = i;
+			i = (i + lower - 1) / 2;
+		}
+		else
+		{
+			lower = i;
+			i = (i + upper + 1) / 2;
+		}
+	}
+	if (ft_strequ(key1, edges[i]->names[0]) && ft_strequ(key2, edges[i]->names[1]))
+		return (edges[i]);
+	return (NULL);
+
+}
+
 int		parse_the_dickens(t_ptrmap **nodes, t_ptrmap **edges)
 {
-	int	step;
-	char *line;
+	int		step;
+	char	*line;
+	char	**links;
+	char	*node1;
+	char	*node2;
+	int		i;
 
 	step = 0;
-	(void)nodes;
-	(void)edges;
-	return (1);
+	while (get_next_line(0, &line) == 1)
+	{
+		links = ft_strsplit(line, ' ');
+		i = 0;
+		while (links[i])
+		{
+			node1 = links[i] + 1;
+			node2 = ft_strchr(links[i], '-') + 1;
+			*ft_strchr(links[i], '-') = '\0';
+			find_node(nodes, node1)->states[step] = true;
+			find_node(nodes, node2)->states[step + 2] = true;
+			find_edge(edges, node1, node2)->states[step + 1] = true;
+			i++;
+		}
+		step += 3;
+		free_matrix((void ***)&links);
+	}
+	return (step);
 }
 
 char	*make_color(unsigned int color)
@@ -395,7 +468,7 @@ void	print_the_dickens(char *map, t_ptrmap ***annotate, int num_steps)
 	{
 		current_color = EN_INACT;
 		new_color = EN_INACT;
-		to_print = vecnew("\033[J\033[38;2;127;0;0m", 18 * sizeof(char));
+		to_print = vecnew("\033[1J\033[38;2;0;127;0m", 19 * sizeof(char));
 		i = 0;
 		while (map[i])
 		{
@@ -431,7 +504,7 @@ void	print_the_dickens(char *map, t_ptrmap ***annotate, int num_steps)
 		}
 		ansi = vec2str(to_print);
 		ft_putstr(ansi);
-		ft_putstr(map);
+usleep(300000);
 		ft_strdel(&ansi);
 		vecdel(&to_print);
 		step++;
@@ -456,7 +529,7 @@ void	execute(t_ptrmap **nodes, t_ptrmap **edges, int num_ants)
 	while (nodes[i])
 	{
 		if (nodes[i]->states == NULL)
-			nodes[i]->states = (bool *)ft_memalloc((num_ants + ft_len((void **)nodes)) * 2 * sizeof(bool));
+			nodes[i]->states = (bool *)ft_memalloc((num_ants + ft_len((void **)nodes)) * 3 * sizeof(bool));
 		if (map[nodes[i]->coords[0][0] + nodes[i]->coords[0][1] * 201] == ' ')
 			map[nodes[i]->coords[0][0] + nodes[i]->coords[0][1] * 201] = '@';
 		add_to_annotation(annotate, nodes[i], nodes[i]->coords[0][0] + nodes[i]->coords[0][1] * 201);
@@ -466,11 +539,10 @@ void	execute(t_ptrmap **nodes, t_ptrmap **edges, int num_ants)
 	while (edges[i])
 	{
 		if (edges[i]->states == NULL)
-			edges[i]->states = (bool *)ft_memalloc((num_ants + ft_len((void **)nodes)) * 2 * sizeof(bool));
+			edges[i]->states = (bool *)ft_memalloc((num_ants + ft_len((void **)nodes)) * 3 * sizeof(bool));
 		fill_between(map, annotate, edges[i++]);
 	}
 	num_steps = parse_the_dickens(nodes, edges);
-	ft_putstr(map);
 	print_the_dickens(map, annotate, num_steps);
 }
 

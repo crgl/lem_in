@@ -18,17 +18,17 @@
 # include "libft/libft.h"
 
 # define E_INACT 0x00aa0000
-# define E_ACT 0x00ff0000
+# define E_ACT 0x00ff0055
 # define SN_INACT 0x00aaaaaa
 # define SN_ACT 0x00ffffff
 # define MN_INACT 0x0000aa00
-# define MN_ACT 0x0000ff00
+# define MN_ACT 0x0055ff00
 # define EN_INACT 0x000000aa
-# define EN_ACT 0x000000ff
+# define EN_ACT 0x000011ff
 # define LL long long
 
 typedef unsigned int	t_color;
-typedef unsigned int	t_pair[2];
+typedef int				t_pair[2];
 typedef t_vec			t_svec;
 
 typedef struct	s_ptrmap

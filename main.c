@@ -12,6 +12,19 @@
 
 #include "ants.h"
 
+void	free_matrix(void ***twod)
+{
+	int	i;
+
+	i = 0;
+	if (*twod == NULL)
+		return ;
+	while ((*twod)[i] != NULL)
+		free((*twod)[i++]);
+	free(*twod);
+	*twod = NULL;
+}
+
 char	*ft_sthreejoin(char *s1, char *s2, char *s3)
 {
 	char	*tmp;
