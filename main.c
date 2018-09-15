@@ -12,31 +12,6 @@
 
 #include "ants.h"
 
-void	free_matrix(void ***twod)
-{
-	int	i;
-
-	i = 0;
-	if (*twod == NULL)
-		return ;
-	while ((*twod)[i] != NULL)
-		free((*twod)[i++]);
-	free(*twod);
-	*twod = NULL;
-}
-
-char	*ft_sthreejoin(char *s1, char *s2, char *s3)
-{
-	char	*tmp;
-	char	*out;
-
-	tmp = ft_strjoin(s1, s2);
-	out = ft_strjoin(tmp, s3);
-	if (tmp)
-		free(tmp);
-	return (out);
-}
-
 void	free_graph(t_nodevec *graph)
 {
 	t_node			*loc;
@@ -57,7 +32,7 @@ void	free_and_clear(t_nodevec *graph)
 {
 	free_graph(graph);
 	dict_mod("clear", NULL, 0);
-	ft_putendl_fd("Invalid input!", 2);
+	ft_putendl("ERROR");
 	exit(-1);
 }
 
@@ -247,7 +222,7 @@ int		main(void)
 	num_ants = parse(0, graph, &nodes);
 	if (nodes == NULL || num_ants < 1)
 	{
-		ft_putendl_fd("Invalid input!", 2);
+		ft_putendl("ERROR");
 		free_graph(graph);
 		return (-1);
 	}

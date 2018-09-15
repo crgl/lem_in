@@ -55,7 +55,7 @@ void	traverse(char *link, t_node **nodes)
 	free(rev);
 }
 
-int	find_flow(t_queue *to_search, t_node **nodes)
+int		find_flow(t_queue *to_search, t_node **nodes)
 {
 	static t_svec	*to_free;
 	t_path			*found;
@@ -167,6 +167,7 @@ t_list	*make_list_of(t_npair just_traveled)
 	}
 	return (NULL);
 }
+
 void	print_and_free(t_queue *rows)
 {
 	t_list	*ln;
@@ -179,7 +180,8 @@ void	print_and_free(t_queue *rows)
 		if (ln->content != NULL)
 		{
 			nodes = (t_npair *)(ln->content);
-			ft_printf("%.*sL%s-%s", i, " ", (*nodes)[0]->name, (*nodes)[1]->name);
+			ft_printf("%.*sL%s-%s", i, " ",
+						(*nodes)[0]->name, (*nodes)[1]->name);
 			free(nodes);
 			i = 1;
 		}
@@ -207,8 +209,8 @@ void	send_out(t_npvec *sequence, int num_ants)
 	{
 		row = NULL;
 		i = 0;
-		while ((whaaat = (t_npair *)get_element(sequence, sizeof(t_npair), i)) &&
-				i < num_ants)
+		while ((whaaat = (t_npair *)get_element(sequence, sizeof(t_npair), i))
+				&& i < num_ants)
 		{
 			ft_lstadd(&row, ft_lstnew(whaaat, sizeof(t_npair)));
 			i++;
@@ -234,14 +236,11 @@ void	find_path(t_node **nodes, int num_ants)
 	t_npvec	*sequence;
 	char	*link;
 
-	start_ind = 0;
-	while (nodes[start_ind])
-	{
+	start_ind = -1;
+	while (nodes[++start_ind])
 		if (nodes[start_ind]->typ == start)
 			break ;
-		start_ind++;
-	}
-	if (num_ants < 1)
+	if (num_ants < 1 || nodes[start_ind]->typ != start)
 		return ;
 	adjust_capacities(nodes, start_ind);
 	sequence = vecnew(NULL, sizeof(t_npair));
@@ -251,7 +250,8 @@ void	find_path(t_node **nodes, int num_ants)
 	{
 		link = ft_sthreejoin(nodes[start_ind]->name, "-", (*ln)->name);
 		if (dict_mod("get", link, 0) == 0)
-			veccat(sequence, &((t_npair){nodes[start_ind], *ln}), sizeof(t_npair));
+			veccat(sequence, &((t_npair){nodes[start_ind], *ln}),
+					sizeof(t_npair));
 		free(link);
 	}
 	if (sequence->len == 0)
