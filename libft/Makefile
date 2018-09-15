@@ -6,7 +6,7 @@
 #    By: cgleason <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/07/09 11:26:27 by cgleason          #+#    #+#              #
-#    Updated: 2018/08/15 16:02:46 by cgleason         ###   ########.fr        #
+#    Updated: 2018/09/15 09:27:56 by cgleason         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,8 @@ SRC = mem1.c mem2.c ft_strlen.c copycat.c strfind.c strcomp.c \
 	  lstlife.c lstiter_over.c \
 	  vecs.c vec_heap.c \
 	  get_next_line.c \
-	  wstrmod.c wchar_utf8.c
+	  wstrmod.c wchar_utf8.c \
+	  project_specific.c
 
 DIRPF = printf
 

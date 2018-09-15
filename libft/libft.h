@@ -6,7 +6,7 @@
 /*   By: cgleason <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/09 10:37:38 by cgleason          #+#    #+#             */
-/*   Updated: 2018/07/19 14:38:23 by cgleason         ###   ########.fr       */
+/*   Updated: 2018/09/15 09:28:51 by cgleason         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,5 +131,8 @@ wchar_t			*ft_wstrjoin(wchar_t const *s1, wchar_t const *s2);
 wchar_t			*ft_wstrdup(wchar_t *s);
 void			wchar_to_utf8(char *utf_str, unsigned long long tmp, int *j);
 char			*ft_to_utf8(wchar_t *wstr, int wchar_num);
+
+void			free_matrix(void ***twod);
+char			*ft_sthreejoin(char *s1, char *s2, char *s3);
 
 #endif
