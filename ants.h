@@ -23,6 +23,18 @@
 # define NOW 1
 # define EVER 2
 
+# define IS_MID(node) ((node)->typ == mid)
+# define OFF_PATH(node) (((node)->visited & EVER) == 0)
+# define UNSEARCHED(node) (((node)->visited & NOW) == 0)
+# define UNRESTRICTED(path) (OFF_PATH((path)->current) || (path)->entered_on_2)
+# define AVAIL(node) (IS_MID(node) && UNSEARCHED(node))
+
+# define MARKS_START(line) ft_strequ(line + 2, "start")
+# define MARKS_END(line) ft_strequ(line + 2, "end")
+# define START_OR_END(line) (ft_strequ(line + 2, "start") ? start : end)
+
+# define REV(link) (dict_mod("get", link, 0) == 2)
+
 typedef enum	e_nodetype
 {
 	start,

@@ -147,66 +147,68 @@ void	add_node(t_nodevec *graph, char *line, t_nodetype typ)
 		free_and_clear(graph);
 }
 
+int		add_special(int fd, t_nodevec *graph, char *line)
+{
+	t_nodetype	typ;
+
+	typ = START_OR_END(line);
+	ft_strdel(&line);
+	get_next_line(fd, &line);
+	if (!line)
+		return (-1);
+	ft_putendl(line);
+	add_node(graph, line, typ);
+	return (0);
+}
+
+char	*add_all_nodes(int fd, t_nodevec *graph, char *line)
+{
+	while (get_next_line(fd, &line) == 1)
+	{
+		if (ft_strlen(line) < 2)
+		{
+			ft_strdel(&line);
+			return (NULL);
+		}
+		if (ft_strchr(line, '-'))
+			break ;
+		ft_putendl(line);
+		if (line[0] != '#')
+			add_node(graph, line, mid);
+		else if (line[1] == '#')
+			if (MARKS_START(line) || MARKS_END(line))
+				if (add_special(fd, graph, line) == -1)
+					return (NULL);
+		ft_strdel(&line);
+	}
+	return (line);
+}
+
 int		parse(int fd, t_nodevec *graph, t_node ***nodes)
 {
 	char	*line;
 	int		num_ants;
 
-	if (get_next_line(fd, &line) == 1)
-	{
-		num_ants = ft_atoi(line);
-		ft_putendl(line);
-	}
-	else
+	if (get_next_line(fd, &line) != 1)
 		return (-1);
+	num_ants = ft_atoi(line);
+	ft_putendl(line);
 	ft_strdel(&line);
-	while (get_next_line(fd, &line) == 1)
-	{
-		ft_putendl(line);
-		if (ft_strlen(line) < 2)
-			return (-1);
-		if (ft_strchr(line, '-'))
-			break ;
-		if (line[0] != '#')
-			add_node(graph, line, mid);
-		else if (line[1] == '#')
-		{
-			if (ft_strequ(line + 2, "start"))
-			{
-				ft_strdel(&line);
-				get_next_line(fd, &line);
-				if (!line)
-					return (-1);
-				ft_putendl(line);
-				add_node(graph, line, start);
-			}
-			else if (ft_strequ(line + 2, "end"))
-			{
-				ft_strdel(&line);
-				get_next_line(fd, &line);
-				if (!line)
-					return (-1);
-				ft_putendl(line);
-				add_node(graph, line, end);
-			}
-		}
-		ft_strdel(&line);
-	}
+	if ((line = add_all_nodes(fd, graph, line)) == NULL)
+		return (-1);
 	if (((*nodes) = clean_up(graph)) == NULL)
 	{
-		free(line);
+		if (line)
+			free(line);
 		return (-1);
 	}
-	if (line && line[0] != '#')
-		add_link(graph, (*nodes), line);
-	if (line)
-		ft_strdel(&line);
-	while (get_next_line(fd, &line) == 1)
+	while (line)
 	{
 		ft_putendl(line);
 		if (line[0] != '#')
 			add_link(graph, (*nodes), line);
 		ft_strdel(&line);
+		get_next_line(fd, &line);
 	}
 	return (num_ants);
 }
