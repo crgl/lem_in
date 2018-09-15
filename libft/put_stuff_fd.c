@@ -19,14 +19,12 @@ void	ft_putchar_fd(char c, int fd)
 
 void	ft_putstr_fd(char const *s, int fd)
 {
-	while (*s != '\0')
-		write(fd, s++, 1);
+	write(fd, s, ft_strlen(s));
 }
 
 void	ft_putendl_fd(char const *s, int fd)
 {
-	while (*s != '\0')
-		write(fd, s++, 1);
+	write(fd, s, ft_strlen(s));
 	write(fd, "\n", 1);
 }
 
