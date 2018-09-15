@@ -209,8 +209,10 @@ int		parse(int fd, t_nodevec *graph, t_node ***nodes)
 		free(line);
 		return (-1);
 	}
-	if (line[0] != '#')
+	if (line && line[0] != '#')
 		add_link(graph, (*nodes), line);
+	if (line)
+		ft_strdel(&line);
 	while (get_next_line(fd, &line) == 1)
 	{
 		ft_putendl(line);
