@@ -98,4 +98,32 @@ t_queue			*q_new(t_list *list);
 t_list			*q_pop(t_queue *queue);
 void			q_add(t_queue *queue, t_list *list);
 
+void			free_graph(t_nodevec *graph);
+void			free_and_clear(t_nodevec *graph);
+int				node_cmp(void *n1, void *n2);
+int				is_valid_node(char *line);
+t_node			*find_node(t_node **nodes, char *key);
+
+void			add_link(t_nodevec *graph, t_node **nodes, char *line);
+void			add_node(t_nodevec *graph, char *line, t_nodetype typ);
+int				add_special(int fd, t_nodevec *graph, char *line);
+char			*add_all_nodes(int fd, t_nodevec *graph, char *line);
+
+void			search_and_destroy(t_queue *to_search, t_path *found,
+					t_svec *to_free);
+void			print_and_free(t_queue *rows);
+void			send_out(t_npvec *sequence, int num_ants, t_list *oldrow,
+					t_list *row);
+void			paths_from_start(t_node **nodes, int start_ind,
+					t_npvec *sequence);
+
+char			*inspect_link(t_node **nodes, t_queue *to_search,
+					t_path *found, t_node *to_inspect);
+t_path			*get_current_path(t_queue *to_search, t_svec **to_free);
+int				find_flow(t_queue *to_search, t_node **nodes);
+void			traverse(char *link, t_node **nodes);
+void			add_node_to_queue(char *new_link, t_path *found,
+					t_node *to_inspect, t_queue *to_search);
+t_list			*make_list_of(t_npair just_traveled);
+
 #endif

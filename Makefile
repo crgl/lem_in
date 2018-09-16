@@ -6,7 +6,7 @@
 #    By: cgleason <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/09/06 14:09:11 by cgleason          #+#    #+#              #
-#    Updated: 2018/09/06 14:17:28 by cgleason         ###   ########.fr        #
+#    Updated: 2018/09/15 18:40:12 by cgleason         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,8 @@ CC = @gcc
 CFLAGS = -Wall -Wextra -Werror
 
 SRC = main.c qops.c dict.c algo.c md5/md5_bitset.c md5/md5_dispatch.c \
-		md5/md5_phase.c md5/md5_prmtvs.c md5/md5_rounds.c
+		md5/md5_phase.c md5/md5_prmtvs.c md5/md5_rounds.c \
+		flow.c free_print.c helpers.c adders.c
 
 VSRC = viz.c parse_dickens.c print_dickens.c fill.c v_parse.c normnodelink.c \
 		edge_findclean.c node_findclean.c
