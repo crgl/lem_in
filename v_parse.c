@@ -48,7 +48,7 @@ int		parse_node(t_pmvec *doublenodes, char **line)
 			return (1);
 		if ((*line)[0] != '#')
 			add_node(doublenodes, *line, MN_INACT, MN_ACT);
-		else if (*line[1] == '#')
+		else if ((*line)[1] == '#')
 		{
 			if (set_ends(doublenodes, line) == -1)
 				return (-1);
