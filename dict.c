@@ -18,54 +18,40 @@ void	freak_out(char *key)
 	exit(-2147483648);
 }
 
+int		dict_clear(char **keys)
+{
+	int	ind;
+
+	ind = 0;
+	while (ind < DICT_SIZE)
+		if (keys[ind++])
+			free(keys[ind - 1]);
+	return (ind);
+}
+
 int		dict_mod(char *op, char *key, int value)
 {
 	int				ind;
 	static char		*keys[DICT_SIZE];
 	static t_byte	caps[DICT_SIZE];
 
-	ind = 0;
+	if (ft_strequ(op, "clear"))
+		return (dict_clear(keys));
+	if (key == NULL)
+		freak_out(key);
+	ind = index_of(key, DICT_SIZE);
+	while (keys[ind] && (ft_strequ(op, "set") || ft_strcmp(keys[ind], key)))
+		ind = (ind + 1) % DICT_SIZE;
 	if (ft_strequ(op, "set"))
 	{
-		if (key == NULL)
-			freak_out(key);
-		ind = index_of(key, DICT_SIZE);
-		while (keys[ind])
-			ind = (ind + 1) % DICT_SIZE;
 		keys[ind] = key;
 		caps[ind] = value;
 	}
-	else if (ft_strequ(op, "mod"))
-	{
-		if (key == NULL)
-			freak_out(key);
-		ind = index_of(key, DICT_SIZE);
-		while (keys[ind] && ft_strcmp(keys[ind], key))
-			ind = (ind + 1) % DICT_SIZE;
-		if (keys[ind])
-			caps[ind] += value;
-		else
-			freak_out(key);
-	}
-	else if (ft_strequ(op, "get"))
-	{
-		if (key == NULL)
-			freak_out(key);
-		ind = index_of(key, DICT_SIZE);
-		while (keys[ind] && ft_strcmp(keys[ind], key))
-			ind = (ind + 1) % DICT_SIZE;
-		if (keys[ind])
-			return (caps[ind]);
-		else
-			freak_out(key);
-	}
-	else if (ft_strequ(op, "clear"))
-	{
-		while (ind < DICT_SIZE)
-			if (keys[ind])
-				free(keys[ind++]);
-	}
-	else
+	else if (keys[ind] == NULL)
 		freak_out(key);
+	else if (ft_strequ(op, "mod"))
+		caps[ind] += value;
+	else if (ft_strequ(op, "get"))
+		return (caps[ind]);
 	return (ind);
 }
