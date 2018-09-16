@@ -22,6 +22,6 @@ int		index_of(char *s, int x)
 	init_md5(&set);
 	update_md5(&set, (t_ptr)s, len);
 	end_md5(digest, &set);
-	return((((unsigned int)digest[0] * digest[15]) ^
+	return ((((unsigned int)digest[0] * digest[15]) ^
 			((unsigned int)digest[0] + digest[15])) % x);
 }
