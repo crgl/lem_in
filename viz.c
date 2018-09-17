@@ -29,13 +29,43 @@ int		is_valid_node(char *line)
 	return (1);
 }
 
+void	free_ptrmap(t_ptrmap *nodedge)
+{
+	int	i;
+
+	i = 0;
+	while (nodedge->names[i])
+		free(nodedge->names[i++]);
+	free(nodedge->states);
+}
+
 void	free_everything(t_ptrmap **nodes, t_ptrmap **edges,
 			t_pmvec *doublenodes, t_pmvec *doubleedges)
 {
+	int	i;
+
+	i = 0;
+	while (nodes[i])
+		free_ptrmap(nodes[i++]);
+	i = 0;
+	while (edges[i])
+		free_ptrmap(edges[i++]);
 	free(nodes);
 	free(edges);
 	vecdel(&doubleedges);
 	vecdel(&doublenodes);
+}
+
+void	free_maps(char *map, t_ptrmap ***annotate)
+{
+	int	i;
+
+	i = 0;
+	while (i < (ROW_LEN + 1) * COLM_LEN + 1)
+		if (annotate[i++])
+			free(annotate[i - 1]);
+	free(map);
+	free(annotate);
 }
 
 void	execute(t_ptrmap **nodes, t_ptrmap **edges, int num_ants)
@@ -63,6 +93,7 @@ void	execute(t_ptrmap **nodes, t_ptrmap **edges, int num_ants)
 	}
 	num_steps = parse_the_dickens(nodes, edges);
 	print_the_dickens(map, annotate, num_steps);
+	free_maps(map, annotate);
 }
 
 int		main(void)
@@ -81,6 +112,7 @@ int		main(void)
 	{
 		ft_putendl_fd("Invalid input!", 2);
 		free_everything(nodes, edges, doublenodes, doubleedges);
+		while (1);
 		return (-1);
 	}
 	execute(nodes, edges, num_ants);

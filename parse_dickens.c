@@ -44,6 +44,7 @@ int		parse_the_dickens(t_ptrmap **nodes, t_ptrmap **edges)
 		set_states(nodes, edges, links, step);
 		step += 3;
 		free_matrix((void ***)&links);
+		free(line);
 	}
 	return (step);
 }
