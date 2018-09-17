@@ -12,6 +12,18 @@
 
 #include "image.h"
 
+void		free_maps(char *map, t_ptrmap ***annotate)
+{
+	int	i;
+
+	i = 0;
+	while (i < (ROW_LEN + 1) * COLM_LEN + 1)
+		if (annotate[i++])
+			free(annotate[i - 1]);
+	free(map);
+	free(annotate);
+}
+
 t_ptrmap	*find_node(t_ptrmap **nodes, char *key)
 {
 	int	i;

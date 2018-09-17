@@ -53,12 +53,15 @@ void	adjust_capacities(t_node **nodes, int start_ind)
 	start_info->current = nodes[start_ind];
 	start_info->path = vecnew(NULL, sizeof(char *));
 	start_info->entered_on_2 = 1;
-	while (find_flow(q_new(ft_lstnew(&start_info, sizeof(start_info))), nodes))
+	while (find_flow(q_new(ft_lstnew(&start_info, sizeof(start_info))),
+								nodes, 0))
 	{
 		i = 0;
 		while (nodes[i])
 			nodes[i++]->visited &= ~NOW;
 	}
+	vecdel(&(start_info->path));
+	free(start_info);
 }
 
 t_list	*make_list_of(t_npair just_traveled)
@@ -101,10 +104,10 @@ void	find_path(t_node **nodes, int num_ants)
 	paths_from_start(nodes, start_ind, sequence);
 	if (sequence->len == 0)
 	{
-		free(sequence);
+		vecdel(&sequence);
 		ft_putendl_fd("ERROR: No path to sink", 2);
 		return ;
 	}
 	send_out(sequence, num_ants, NULL, NULL);
-	free(sequence);
+	vecdel(&sequence);
 }

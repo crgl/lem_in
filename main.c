@@ -74,6 +74,8 @@ int		main(void)
 	if (nodes == NULL || num_ants < 1)
 	{
 		ft_putendl("ERROR");
+		if (nodes)
+			free(nodes);
 		free_graph(graph);
 		return (-1);
 	}

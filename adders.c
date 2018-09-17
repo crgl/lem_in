@@ -50,17 +50,17 @@ void	add_node(t_nodevec *graph, char *line, t_nodetype typ)
 		free_and_clear(graph);
 }
 
-int		add_special(int fd, t_nodevec *graph, char *line)
+int		add_special(int fd, t_nodevec *graph, char **line)
 {
 	t_nodetype	typ;
 
-	typ = START_OR_END(line);
-	ft_strdel(&line);
-	get_next_line(fd, &line);
-	if (!line)
+	typ = START_OR_END(*line);
+	ft_strdel(line);
+	get_next_line(fd, line);
+	if (!*line)
 		return (-1);
-	ft_putendl(line);
-	add_node(graph, line, typ);
+	ft_putendl(*line);
+	add_node(graph, *line, typ);
 	return (0);
 }
 
@@ -80,7 +80,7 @@ char	*add_all_nodes(int fd, t_nodevec *graph, char *line)
 			add_node(graph, line, mid);
 		else if (line[1] == '#')
 			if (MARKS_START(line) || MARKS_END(line))
-				if (add_special(fd, graph, line) == -1)
+				if (add_special(fd, graph, &line) == -1)
 					return (NULL);
 		ft_strdel(&line);
 	}

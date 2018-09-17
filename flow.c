@@ -53,21 +53,33 @@ t_path	*get_current_path(t_queue *to_search, t_svec **to_free)
 		*to_free = vecnew(NULL, sizeof(char *));
 	next_node = q_pop(to_search);
 	found = *((t_path **)(next_node->content));
+	free(next_node->content);
 	free(next_node);
 	return (found);
 }
 
-int		find_flow(t_queue *to_search, t_node **nodes)
+void	free_path(t_path *path)
+{
+	if (path && path->current->typ != start)
+	{
+		vecdel(&(path->path));
+		free(path);
+	}
+}
+
+int		find_flow(t_queue *to_search, t_node **nodes, size_t i)
 {
 	static t_svec	*to_free;
 	t_path			*found;
-	size_t			i;
 	t_node			**to_inspect;
 	char			*new_link;
 
 	if ((found = get_current_path(to_search, &to_free)) == NULL)
+	{
+		search_and_destroy(to_search, found, to_free);
+		vecdel(&to_free);
 		return (0);
-	i = 0;
+	}
 	while ((to_inspect = (t_node **)get_element(found->current->links,
 										sizeof(t_node *), i++)))
 	{
@@ -78,10 +90,8 @@ int		find_flow(t_queue *to_search, t_node **nodes)
 			vecdel(&to_free);
 			return (1);
 		}
-		if (dict_mod("get", new_link, 0) != 0)
-			veccat(to_free, &new_link, sizeof(char *));
-		else
-			free(new_link);
+		veccat(to_free, &new_link, sizeof(char *));
 	}
-	return (find_flow(to_search, nodes));
+	free_path(found);
+	return (find_flow(to_search, nodes, 0));
 }

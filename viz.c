@@ -56,18 +56,6 @@ void	free_everything(t_ptrmap **nodes, t_ptrmap **edges,
 	vecdel(&doublenodes);
 }
 
-void	free_maps(char *map, t_ptrmap ***annotate)
-{
-	int	i;
-
-	i = 0;
-	while (i < (ROW_LEN + 1) * COLM_LEN + 1)
-		if (annotate[i++])
-			free(annotate[i - 1]);
-	free(map);
-	free(annotate);
-}
-
 void	execute(t_ptrmap **nodes, t_ptrmap **edges, int num_ants)
 {
 	char		*map;
@@ -112,7 +100,6 @@ int		main(void)
 	{
 		ft_putendl_fd("Invalid input!", 2);
 		free_everything(nodes, edges, doublenodes, doubleedges);
-		while (1);
 		return (-1);
 	}
 	execute(nodes, edges, num_ants);

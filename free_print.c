@@ -22,7 +22,7 @@ void	search_and_destroy(t_queue *to_search, t_path *found, t_svec *to_free)
 	i = 0;
 	while ((freeable = (char **)get_element(to_free, sizeof(char *), i++)))
 		free(*freeable);
-	if (found->current->typ != start)
+	if (found && found->current->typ != start)
 	{
 		vecdel(&(found->path));
 		free(found);
@@ -33,6 +33,7 @@ void	search_and_destroy(t_queue *to_search, t_path *found, t_svec *to_free)
 		also_this->current->visited &= ~NOW;
 		vecdel(&(also_this->path));
 		free(also_this);
+		free(this_too->content);
 		free(this_too);
 	}
 	free(to_search);

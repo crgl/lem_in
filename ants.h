@@ -106,7 +106,7 @@ t_node			*find_node(t_node **nodes, char *key);
 
 void			add_link(t_nodevec *graph, t_node **nodes, char *line);
 void			add_node(t_nodevec *graph, char *line, t_nodetype typ);
-int				add_special(int fd, t_nodevec *graph, char *line);
+int				add_special(int fd, t_nodevec *graph, char **line);
 char			*add_all_nodes(int fd, t_nodevec *graph, char *line);
 
 void			search_and_destroy(t_queue *to_search, t_path *found,
@@ -120,7 +120,7 @@ void			paths_from_start(t_node **nodes, int start_ind,
 char			*inspect_link(t_node **nodes, t_queue *to_search,
 					t_path *found, t_node *to_inspect);
 t_path			*get_current_path(t_queue *to_search, t_svec **to_free);
-int				find_flow(t_queue *to_search, t_node **nodes);
+int				find_flow(t_queue *to_search, t_node **nodes, size_t i);
 void			traverse(char *link, t_node **nodes);
 void			add_node_to_queue(char *new_link, t_path *found,
 					t_node *to_inspect, t_queue *to_search);

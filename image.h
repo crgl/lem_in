@@ -68,4 +68,6 @@ int						is_valid_node(char *line);
 void					set_node_char(t_ptrmap **nodes, t_ptrmap ***annotate,
 							char *map, int num_ants);
 
+void					free_maps(char *map, t_ptrmap ***annotate);
+
 #endif

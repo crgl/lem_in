@@ -31,8 +31,7 @@ void	add_node(t_pmvec *doublenodes, char *line,
 	}
 	else
 	{
-		ft_printf("There seems to be... trouble\n");
-		free(doublenodes);
+		ft_printf("ERROR: Invalid node\n");
 		exit(-1);
 	}
 }
@@ -58,8 +57,7 @@ void	add_link(t_ptrmap **nodes, t_pmvec *doubleedges, char *line)
 	*ft_strchr(line, '-') = '\0';
 	if (!find_node(nodes, line) || !find_node(nodes, node2))
 	{
-		ft_printf("There seems to be... trouble\n");
-		free(doubleedges);
+		ft_printf("ERROR: Invalid link!\n");
 		exit(-1);
 	}
 	the_stuff = (t_ptrmap *)ft_memalloc(sizeof(t_ptrmap));
