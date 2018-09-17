@@ -81,10 +81,16 @@ void	set_norm_coords(t_ptrmap **nodes, int set[4])
 	i = 0;
 	while ((nodes[i]) != NULL)
 	{
-		nodes[i]->coords[0][0] = (nodes[i]->coords[0][0] -
-			(LL)set[0]) * (LL)199 / set[1];
-		nodes[i]->coords[0][1] = (nodes[i]->coords[0][1] -
-			(LL)set[2]) * (LL)49 / set[3];
+		if (set[0] != set[1])
+			nodes[i]->coords[0][0] = ((nodes[i]->coords[0][0] -
+				(LL)set[0]) * (LL)199) / (set[1] - (LL)set[0]);
+		else
+			nodes[i]->coords[0][0] = 100;
+		if (set[2] != set[3])
+			nodes[i]->coords[0][1] = ((nodes[i]->coords[0][1] -
+				(LL)set[2]) * (LL)49) / (set[3] - (LL)set[2]);
+		else
+			nodes[i]->coords[0][1] = 25;
 		i++;
 	}
 }
@@ -99,7 +105,7 @@ void	normalize(t_ptrmap **nodes)
 	set[1] = INT_MIN;
 	set[2] = INT_MAX;
 	set[3] = INT_MIN;
-	while ((nodes[i]) != NULL)
+	while (nodes[i] != NULL)
 	{
 		if (nodes[i]->coords[0][0] > set[1])
 			set[1] = nodes[i]->coords[0][0];
