@@ -18,12 +18,14 @@ CC = @gcc
 
 CFLAGS = -Wall -Wextra -Werror
 
-SRC = main.c qops.c dict.c algo.c md5/md5_bitset.c md5/md5_dispatch.c \
+SRC = algo/main.c algo/qops.c algo/dict.c algo/algo.c \
+		algo/flow.c algo/free_print.c algo/helpers.c algo/adders.c \
+		md5/md5_bitset.c md5/md5_dispatch.c \
 		md5/md5_phase.c md5/md5_prmtvs.c md5/md5_rounds.c \
-		flow.c free_print.c helpers.c adders.c
 
-VSRC = viz.c parse_dickens.c print_dickens.c fill.c v_parse.c normnodelink.c \
-		edge_findclean.c node_findclean.c
+VSRC = visual/viz.c visual/parse_dickens.c visual/print_dickens.c \
+		visual/fill.c visual/v_parse.c visual/normnodelink.c \
+		visual/edge_findclean.c visual/node_findclean.c \
 
 OBJS = $(SRC:.c=.o)
 

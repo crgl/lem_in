@@ -15,18 +15,18 @@
 
 # include <stdbool.h>
 # include <limits.h>
-# include "libft/libft.h"
+# include "../libft/libft.h"
 
 # define ROW_LEN 200
 # define COLM_LEN 50
-# define E_INACT 0x00aa0000
-# define E_ACT 0x00ff0055
-# define SN_INACT 0x00aaaaaa
-# define SN_ACT 0x00ffffff
-# define MN_INACT 0x0000aa00
-# define MN_ACT 0x0055ff00
-# define EN_INACT 0x000000aa
-# define EN_ACT 0x000011ff
+# define E_INACT 0x003d0099
+# define E_ACT 0x00e0ccff
+# define SN_INACT 0x0000997a
+# define SN_ACT 0x0000ffcb
+# define MN_INACT 0x00005999
+# define MN_ACT 0x00f7fcf7
+# define EN_INACT 0x007c0101
+# define EN_ACT 0x00ff0000
 # define LL long long
 
 typedef unsigned int	t_color;

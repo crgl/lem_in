@@ -44,7 +44,7 @@ void	x_shift(int x_start, char *map, t_ptrmap ***annotate, t_ptrmap *edge)
 	while (x_start < edge->coords[1][0])
 	{
 		if (map[x_start + edge->coords[0][1] * (ROW_LEN + 1)] == ' ')
-			map[x_start + edge->coords[0][1] * (ROW_LEN + 1)] = '=';
+			map[x_start + edge->coords[0][1] * (ROW_LEN + 1)] = '>';
 		if (map[x_start + edge->coords[0][1] * (ROW_LEN + 1)] != '@')
 			add_to_annotation(annotate, edge,
 				x_start + edge->coords[0][1] * (ROW_LEN + 1));
@@ -53,7 +53,7 @@ void	x_shift(int x_start, char *map, t_ptrmap ***annotate, t_ptrmap *edge)
 	while (x_start > edge->coords[1][0])
 	{
 		if (map[x_start + edge->coords[0][1] * (ROW_LEN + 1)] == ' ')
-			map[x_start + edge->coords[0][1] * (ROW_LEN + 1)] = '=';
+			map[x_start + edge->coords[0][1] * (ROW_LEN + 1)] = '>';
 		if (map[x_start + edge->coords[0][1] * (ROW_LEN + 1)] != '@')
 			add_to_annotation(annotate, edge,
 				x_start + edge->coords[0][1] * (ROW_LEN + 1));
@@ -66,7 +66,7 @@ void	y_shift(int y_start, char *map, t_ptrmap ***annotate, t_ptrmap *edge)
 	while (y_start < edge->coords[1][1])
 	{
 		if (map[edge->coords[1][0] + y_start * (ROW_LEN + 1)] == ' ')
-			map[edge->coords[1][0] + y_start * (ROW_LEN + 1)] = '|';
+			map[edge->coords[1][0] + y_start * (ROW_LEN + 1)] = 'X';
 		if (map[edge->coords[1][0] + y_start * (ROW_LEN + 1)] != '@')
 			add_to_annotation(annotate, edge,
 				edge->coords[1][0] + y_start * (ROW_LEN + 1));
@@ -75,7 +75,7 @@ void	y_shift(int y_start, char *map, t_ptrmap ***annotate, t_ptrmap *edge)
 	while (y_start > edge->coords[1][1])
 	{
 		if (map[edge->coords[1][0] + y_start * (ROW_LEN + 1)] == ' ')
-			map[edge->coords[1][0] + y_start * (ROW_LEN + 1)] = '|';
+			map[edge->coords[1][0] + y_start * (ROW_LEN + 1)] = 'X';
 		if (map[edge->coords[1][0] + y_start * (ROW_LEN + 1)] != '@')
 			add_to_annotation(annotate, edge,
 				edge->coords[1][0] + y_start * (ROW_LEN + 1));
