@@ -33,6 +33,25 @@ int		set_ends(t_pmvec *doublenodes, char **line)
 	return (1);
 }
 
+int		is_link(char *line)
+{
+	if (ft_strchr(line, ' '))
+	{
+		if (ft_strchr(line, '-'))
+		{
+			if (ft_strchr(line, '-') - ft_strchr(line, ' ') < 0)
+				return (1);
+			else
+				return (0);
+		}
+		else
+			return (0);
+	}
+	else if (ft_strchr(line, '-'))
+		return (1);
+	return (0);
+}
+
 int		parse_node(t_pmvec *doublenodes, char **line)
 {
 	while (get_next_line(0, line) == 1)
@@ -44,7 +63,7 @@ int		parse_node(t_pmvec *doublenodes, char **line)
 		}
 		if (ft_strlen(*line) < 2)
 			return (-1);
-		if (ft_strchr(*line, '-'))
+		if (is_link(*line))
 			return (1);
 		if ((*line)[0] != '#')
 			add_node(doublenodes, *line, MN_INACT, MN_ACT);

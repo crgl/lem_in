@@ -64,6 +64,25 @@ int		add_special(int fd, t_nodevec *graph, char **line)
 	return (0);
 }
 
+int		is_link(char *line)
+{
+	if (ft_strchr(line, ' '))
+	{
+		if (ft_strchr(line, '-'))
+		{
+			if (ft_strchr(line, '-') - ft_strchr(line, ' ') < 0)
+				return (1);
+			else
+				return (0);
+		}
+		else
+			return (0);
+	}
+	else if (ft_strchr(line, '-'))
+		return (1);
+	return (0);
+}
+
 char	*add_all_nodes(int fd, t_nodevec *graph, char *line)
 {
 	while (get_next_line(fd, &line) == 1)
@@ -73,7 +92,7 @@ char	*add_all_nodes(int fd, t_nodevec *graph, char *line)
 			ft_strdel(&line);
 			return (NULL);
 		}
-		if (ft_strchr(line, '-'))
+		if (is_link(line))
 			break ;
 		ft_putendl(line);
 		if (line[0] != '#')

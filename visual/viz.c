@@ -23,8 +23,8 @@ int		is_valid_node(char *line)
 	i = 0;
 	if (!line[0] || line[0] == 'L' || line[0] == '-')
 		return (0);
-	while (line[++i])
-		if (line[i] == '-')
+	while (line[i] && line[i] != ' ')
+		if (line[i++] == '-')
 			return (0);
 	return (1);
 }
