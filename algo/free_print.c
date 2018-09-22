@@ -53,6 +53,11 @@ void	print_and_free(t_queue *rows)
 			nodes = (t_npair *)(ln->content);
 			ft_printf("%.*sL%s-%s", i, " ",
 						(*nodes)[0]->name, (*nodes)[1]->name);
+			if ((*nodes)[1]->typ == end)
+			{
+				free((*nodes)[0]->name);
+				free((*nodes)[0]);
+			}
 			free(nodes);
 			i = 1;
 		}

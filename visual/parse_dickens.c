@@ -12,7 +12,7 @@
 
 #include "image.h"
 
-void	set_states(t_ptrmap **nodes, t_ptrmap **edges, char **links, int step, char **old_links,
+void	set_states(t_ptrmap ***nodedges, char ***links, int step,
 					t_ptrmap *start)
 {
 	char	*node1;
@@ -21,26 +21,25 @@ void	set_states(t_ptrmap **nodes, t_ptrmap **edges, char **links, int step, char
 	int		j;
 	size_t	len;
 
-	i = 0;
-	while (links[i])
+	i = -1;
+	while (links[0][++i])
 	{
-		len = ft_strchr(links[i], '-') - links[i] + 1;
+		len = ft_strchr(links[0][i], '-') - links[0][i] + 1;
 		node1 = start->names[0];
 		j = 0;
-		while (old_links && old_links[j])
+		while (links[1] && links[1][j])
 		{
-			if (ft_strncmp(old_links[j], links[i], len) == 0)
+			if (ft_strncmp(links[1][j], links[0][i], len) == 0)
 			{
-				node1 = ft_strchr(old_links[j], '-') + 1;
+				node1 = ft_strchr(links[1][j], '-') + 1;
 				break ;
 			}
 			j++;
 		}
-		node2 = ft_strchr(links[i], '-') + 1;
-		find_node(nodes, node1)->states[step] = true;
-		find_node(nodes, node2)->states[step + 2] = true;
-		find_edge(edges, node1, node2)->states[step + 1] = true;
-		i++;
+		node2 = ft_strchr(links[0][i], '-') + 1;
+		find_node(nodedges[0], node1)->states[step] = true;
+		find_node(nodedges[0], node2)->states[step + 2] = true;
+		find_edge(nodedges[1], node1, node2)->states[step + 1] = true;
 	}
 }
 
@@ -48,26 +47,28 @@ int		parse_the_dickens(t_ptrmap **nodes, t_ptrmap **edges)
 {
 	int			step;
 	char		*line;
-	char		**links;
-	char		**old_links;
+	char		**links[2];
 	t_ptrmap	*start_node;
+	t_ptrmap	**nodedges[2];
 
 	step = 0;
 	start_node = nodes[step];
 	while (start_node->inactive != SN_INACT)
 		start_node = nodes[++step];
+	ft_memcpy(nodedges, (t_ptrmap **[]){nodes, edges}, 2 * sizeof(void *));
 	step = 0;
-	old_links = NULL;
+	links[1] = NULL;
 	while (get_next_line(0, &line) == 1)
 	{
-		links = ft_strsplit(line, ' ');
-		set_states(nodes, edges, links, step, old_links, start_node);
+		links[0] = ft_strsplit(line, ' ');
+		set_states(nodedges, links, step, start_node);
 		step += 3;
-		if (old_links)
-			free_matrix((void ***)&old_links);
-		old_links = links;
+		if (links[1])
+			free_matrix((void ***)&links[1]);
+		links[1] = links[0];
 		free(line);
 	}
+	free_matrix((void ***)&links[1]);
 	return (step);
 }
 
