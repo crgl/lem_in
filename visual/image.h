@@ -65,6 +65,8 @@ void					add_link(t_ptrmap **nodes, t_pmvec *doubleedges,
 void					normalize(t_ptrmap **nodes);
 int						is_valid_node(char *line);
 
+void					parse_command(t_pmvec *doubleedges, char **line);
+
 void					set_node_char(t_ptrmap **nodes, t_ptrmap ***annotate,
 							char *map, int num_ants);
 

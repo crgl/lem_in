@@ -66,6 +66,23 @@ void	print_and_free(t_queue *rows)
 	free(rows);
 }
 
+void	send_help(t_list **arow, t_npair *seq_e, int i, int num_ants)
+{
+	t_npair	bob;
+	t_node	*new_ant;
+
+	new_ant = (t_node *)ft_memalloc(sizeof(t_node));
+	if (new_ant == NULL)
+		exit(-1);
+	new_ant->name = ft_itoa(num_ants - i);
+	if (new_ant->name == NULL)
+		exit(-1);
+	new_ant->typ = ant;
+	bob[0] = new_ant;
+	bob[1] = (*seq_e)[1];
+	ft_lstadd(arow, ft_lstnew(&bob, sizeof(t_npair)));
+}
+
 void	send_out(t_npvec *sequence, int num_ants, t_list *oldrow, t_list *row)
 {
 	t_npair	*seq_e;
@@ -79,7 +96,7 @@ void	send_out(t_npvec *sequence, int num_ants, t_list *oldrow, t_list *row)
 		i = 0;
 		while ((seq_e = (t_npair *)get_element(sequence, sizeof(t_npair), i))
 				&& i++ < num_ants)
-			ft_lstadd(&row, ft_lstnew(seq_e, sizeof(t_npair)));
+			send_help(&row, seq_e, i, num_ants);
 		while (oldrow)
 		{
 			ft_lstadd(&row, make_list_of(*(t_npair *)(oldrow->content)));

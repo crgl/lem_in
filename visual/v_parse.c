@@ -91,9 +91,9 @@ void	parse_edges(t_pmvec *doubleedges, t_ptrmap **nodes, char **line)
 			return ;
 		}
 		if ((*line)[0] != '#')
-		{
 			add_link(nodes, doubleedges, *line);
-		}
+		else if ((*line)[1] == '#')
+			parse_command(doubleedges, line);
 		ft_strdel(line);
 	}
 }

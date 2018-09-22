@@ -99,7 +99,6 @@ int		main(void)
 	if (num_ants < 1)
 	{
 		ft_putendl_fd("Invalid input!", 2);
-		free_everything(nodes, edges, doublenodes, doubleedges);
 		return (-1);
 	}
 	execute(nodes, edges, num_ants);

@@ -64,7 +64,7 @@ void	adjust_capacities(t_node **nodes, int start_ind)
 	free(start_info);
 }
 
-t_list	*make_list_of(t_npair just_traveled)
+t_list	*make_list_of(t_npair old)
 {
 	t_node	*current;
 	t_node	**ln;
@@ -72,7 +72,7 @@ t_list	*make_list_of(t_npair just_traveled)
 	char	*link;
 	t_list	*out;
 
-	current = just_traveled[1];
+	current = old[1];
 	out = NULL;
 	i = 0;
 	while ((ln = (t_node **)get_element(current->links,
@@ -80,7 +80,7 @@ t_list	*make_list_of(t_npair just_traveled)
 	{
 		link = ft_sthreejoin(current->name, "-", (*ln)->name);
 		if (dict_mod("get", link, 0) == 0)
-			out = ft_lstnew(&((t_npair){current, *ln}), sizeof(t_npair));
+			out = ft_lstnew(&((t_npair){old[0], *ln}), sizeof(t_npair));
 		free(link);
 		if (out)
 			return (out);
@@ -97,8 +97,11 @@ void	find_path(t_node **nodes, int num_ants)
 	while (nodes[++start_ind])
 		if (nodes[start_ind]->typ == start)
 			break ;
-	if (num_ants < 1 || nodes[start_ind]->typ != start)
+	if (num_ants < 1 || !nodes[start_ind] || nodes[start_ind]->typ != start)
+	{
+		ft_putendl_fd("ERROR", 2);
 		return ;
+	}
 	adjust_capacities(nodes, start_ind);
 	sequence = vecnew(NULL, sizeof(t_npair));
 	paths_from_start(nodes, start_ind, sequence);

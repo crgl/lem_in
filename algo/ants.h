@@ -40,6 +40,7 @@ typedef enum	e_nodetype
 	start,
 	end,
 	mid,
+	ant,
 }				t_nodetype;
 
 typedef t_vec	t_nodevec;
