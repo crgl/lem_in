@@ -112,7 +112,7 @@ char			*add_all_nodes(int fd, t_nodevec *graph, char *line);
 
 void			search_and_destroy(t_queue *to_search, t_path *found,
 					t_svec *to_free);
-void			print_and_free(t_queue *rows);
+void			print_and_free(t_queue *rows, int i);
 void			send_out(t_npvec *sequence, int num_ants, t_list *oldrow,
 					t_list *row);
 void			paths_from_start(t_node **nodes, int start_ind,

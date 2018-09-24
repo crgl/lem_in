@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = lem_in
+NAME = lem-in
 
 NAME2 = viz
 
@@ -35,7 +35,7 @@ LIBDIR = libft
 
 LIB = $(LIBDIR)/libft.a
 
-.PHONY both: $(NAME) $(NAME2)
+both: $(NAME) $(NAME2)
 
 $(NAME): $(OBJS) $(LIB)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIB)
@@ -46,7 +46,7 @@ $(NAME2): $(VOBJS) $(LIB)
 $(LIB):
 	@make -C $(LIBDIR)
 
-.PHONY: clean fclean all re debug
+.PHONY: clean fclean all re debug both
 
 debug: $(SRC) $(LIB)
 	$(CC) -o debug -g $(SRC) $(LIB)

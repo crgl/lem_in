@@ -75,7 +75,8 @@ t_svec	*update_map(char *map, t_ptrmap ***annotate, int step)
 
 	current_color = EN_INACT;
 	new_color = EN_INACT;
-	to_print = vecnew("\033[1J\033[38;2;0;127;0m", 19 * sizeof(char));
+	to_print = vecnew("\033[1J", 4 * sizeof(char));
+	color_change(to_print, new_color, &current_color);
 	i = 0;
 	while (map[i])
 	{

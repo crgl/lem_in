@@ -26,15 +26,14 @@ void	set_states(t_ptrmap ***nodedges, char ***links, int step,
 	{
 		len = ft_strchr(links[0][i], '-') - links[0][i] + 1;
 		node1 = start->names[0];
-		j = 0;
-		while (links[1] && links[1][j])
+		j = -1;
+		while (links[1] && links[1][++j])
 		{
 			if (ft_strncmp(links[1][j], links[0][i], len) == 0)
 			{
 				node1 = ft_strchr(links[1][j], '-') + 1;
 				break ;
 			}
-			j++;
 		}
 		node2 = ft_strchr(links[0][i], '-') + 1;
 		find_node(nodedges[0], node1)->states[step] = true;

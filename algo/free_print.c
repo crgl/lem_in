@@ -39,26 +39,23 @@ void	search_and_destroy(t_queue *to_search, t_path *found, t_svec *to_free)
 	free(to_search);
 }
 
-void	print_and_free(t_queue *rows)
+void	print_and_free(t_queue *rows, int i)
 {
 	t_list	*ln;
-	t_npair	*nodes;
-	int		i;
+	t_npair	*nds;
 
-	i = 0;
 	while ((ln = q_pop(rows)) != NULL)
 	{
 		if (ln->content != NULL)
 		{
-			nodes = (t_npair *)(ln->content);
-			ft_printf("%.*sL%s-%s", i, " ",
-						(*nodes)[0]->name, (*nodes)[1]->name);
-			if ((*nodes)[1]->typ == end)
+			nds = (t_npair *)(ln->content);
+			ft_printf("%.*sL%s-%s", i, " ", (*nds)[0]->name, (*nds)[1]->name);
+			if ((*nds)[1]->typ == end)
 			{
-				free((*nodes)[0]->name);
-				free((*nodes)[0]);
+				free((*nds)[0]->name);
+				free((*nds)[0]);
 			}
-			free(nodes);
+			free(nds);
 			i = 1;
 		}
 		else
@@ -112,7 +109,7 @@ void	send_out(t_npvec *sequence, int num_ants, t_list *oldrow, t_list *row)
 		oldrow = row;
 		num_ants -= sequence->len / sizeof(t_npair);
 	}
-	print_and_free(ant_plan);
+	print_and_free(ant_plan, 0);
 }
 
 void	paths_from_start(t_node **nodes, int start_ind, t_npvec *sequence)
